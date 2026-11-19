@@ -1,0 +1,52 @@
+name: CI - Style, Target Build, Unit Tests & Coverage
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  verify:
+    name: DO-178C / MISRA Compliance, Target Build & Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install toolchains and verification tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc \
+            gawk \
+            make \
+            gcc-aarch64-linux-gnu \
+            binutils-aarch64-linux-gnu \
+            gcovr \
+            python3
+
+      - name: Run automated coding rules & traceability audit
+        run: python3 scripts/verify_compliance.py
+
+      - name: Run Makefile Rule 0 style check
+        run: make style
+
+      - name: Cross-compile Cortex-A53 target library & check stack usage
+        run: |
+          make target CROSS_COMPILE=aarch64-linux-gnu-
+          make stack CROSS_COMPILE=aarch64-linux-gnu-
+
+      - name: Run host unit tests
+        run: make test
+
+      - name: Generate line and branch coverage report
+        run: make coverage
+
+      - name: Upload HTML coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: build/coverage/

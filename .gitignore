@@ -1,0 +1,24 @@
+# Build and coverage output
+build/
+
+# Object files, archives, executables, stack usage
+*.o
+*.a
+*.su
+*.elf
+*.exe
+*.out
+
+# GCC coverage artefacts
+*.gcno
+*.gcda
+*.gcov
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db

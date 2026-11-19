@@ -1,0 +1,19 @@
+# Enforce LF line endings for all source, build, script, and doc files
+# so Windows git checkouts never introduce CRLF and break 'make style'.
+* text=auto eol=lf
+
+*.c          text eol=lf
+*.h          text eol=lf
+*.awk        text eol=lf
+Makefile     text eol=lf
+*.md         text eol=lf
+*.py         text eol=lf
+*.ps1        text eol=lf
+*.yml        text eol=lf
+.editorconfig text eol=lf
+.gitignore   text eol=lf
+.gitattributes text eol=lf
+
+# Binary files
+*.pdf        binary
+*.PDF        binary
